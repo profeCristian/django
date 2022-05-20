@@ -97,7 +97,7 @@ def personas_edit(request, pk):
     mensajes=[]
     errores=[]
     personas = Persona.objects.all()
-    personar =get_object_or_404(Persona, id_persona=pk)
+    
     context={}
     '''
     if jugador:
@@ -132,8 +132,8 @@ def personas_edit(request, pk):
             accion = 'form_edit'
             context = {'jugadores': jugadores, 'mensajes': mensajes,
                        'errores': errores,'form':form, 'accion': accion}
-        '''               
-    return render(request, 'personal/personas_list.html', context)
+    '''               
+    return render(request, 'personas/personas_list.html', context)
     '''
     else:
         print("Error, id_jugador no existe")
@@ -154,7 +154,7 @@ def index(request):
              'carrera':'Analista Programador',
              'idJornada': 2,
              'dias': dias,
-             'personas': personas
+             
             }
 
     return render(request,"personas/index.html",context)
