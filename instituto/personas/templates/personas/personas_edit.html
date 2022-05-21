@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <h1>Actualizar datos</h1>  
+
     <form action={% url "personasAdd" %} method="post">
         {% csrf_token %}
 	    Rut:     <input type="text" name="rut" value="{{persona.rut}}" readonly><br>
