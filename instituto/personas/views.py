@@ -1,5 +1,5 @@
 from multiprocessing import context
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
 
 from .models import Persona
@@ -50,7 +50,7 @@ def personasAdd(request):
         opcion=request.POST.get("opcion","")
         print("opcion="+opcion)
         #Listar
-        if opcion=="Editar":
+        if opcion=="Editar" or opcion == "Volver":
             personas = Persona.objects.all()
             context ={'personas':personas}
             print("enviando datoa personas_edit")
@@ -68,7 +68,21 @@ def personasAdd(request):
             else:
                 context={'mensaje':"Error, los campos no deben estar vacios"}
 
-           
+           #Agregar
+        if opcion=="Actualizar":
+            rut=request.POST["rut"]
+            nombre=request.POST["nombre"]
+            edad=request.POST["edad"]
+       
+            if rut != "" and nombre != "" and edad !="":
+                persona = Persona(rut, nombre, edad) 
+                persona.save()
+                context={'persona':persona,'mensaje':"Ok, datos actualizados..."}
+            else:
+                context={'mensaje':"Error, los campos no deben estar vacios"}
+            return render(request,"personas/personas_edit.html",context) 
+
+
     return render(request,"personas/personas_add.html",context)   
 
 
@@ -96,9 +110,28 @@ def personas_del(request, pk):
 def personas_edit(request, pk):
     mensajes=[]
     errores=[]
-    personas = Persona.objects.all()
+   
     
     context={}
+    personas = Persona.objects.all()
+    #try:
+    persona=Persona.objects.get(rut=pk)
+
+    context={}
+    if persona:
+        print("Edit encontró a persona...")
+        mensajes.append("Bien, datos eliminados...")
+
+        context = {'persona': persona,  'mensajes': mensajes, 'errores':errores}
+
+        return render(request, 'personas/personas_edit.html', context)
+    '''
+    except:
+        print("Error, rut no existe")
+        errores.append("Error rut no encontrado.")
+        context = {'personas': personas,  'mensajes': mensajes, 'errores':errores}
+        return render(request, 'personas/personas_list.html', context)
+    '''
     '''
     if jugador:
         form = FormJugador(request.POST or None,

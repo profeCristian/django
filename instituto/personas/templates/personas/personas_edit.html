@@ -9,15 +9,15 @@
 <body>
 
 
-    <form action="personasAdd" method="post">
+    <form action={% url "personasAdd" %} method="post">
         {% csrf_token %}
-	    Rut:     <input type="text" name="rut"    ><br>
-        Nombre:  <input type="text" name="nombre" ><br>
-		edad:    <input type="number" name="edad" value="0"><br>
+	    Rut:     <input type="text" name="rut" value="{{persona.rut}}" readonly><br>
+        Nombre:  <input type="text" name="nombre" value="{{persona.nombre}}"><br>
+		edad:    <input type="number" name="edad" value="{{persona.edad}}"><br>
        
 
-        <input type="submit" name="opcion" value="Agregar">
-		<input type="submit" name="opcion" value="Editar">
+        <input type="submit" name="opcion" value="Actualizar">
+		<input type="submit" name="opcion" value="Volver">
 		
 		<br>
     </form>
