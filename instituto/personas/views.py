@@ -2,7 +2,7 @@ from multiprocessing import context
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Persona
+from .models import Persona, Producto
 
 
 # Create your views here.
@@ -264,4 +264,108 @@ def controlador(request):
            
     return render(request,"personas/crud.html",context)
 
+##################   P R O D U C T O S ######################
+ 
+def productos_crud(request):
+    print("estoy en Productos Crud...")
+    context={} 
+    return render(request,"personas/productos_add.html",context)
 
+def productosAdd(request):
+    print("estoy en controlador ProductosAdd...")
+    context={}
+    if request.method == "POST":
+        print("contralador productos es un post...") 
+        opcion=request.POST.get("opcion","")
+        print("opcion="+opcion)
+        #Listar
+        if opcion=="Editar" or opcion == "Volver":
+            productos = Producto.objects.all()
+            context ={'productos':productos}
+            print("enviando datos a productos_list")
+            return render(request,"personas/productos_list.html",context) 
+        #Agregar
+        if opcion=="Agregar":
+            idProducto=request.POST["idProducto"]
+            nombreProducto=request.POST["nombreProducto"]
+            stock=int(request.POST["stock"])
+            precio=int(request.POST["precio"])
+            fotoProducto=request.FILES["fotoProducto"]
+
+       
+            if idProducto != "" and nombreProducto != "" and stock >=0 and precio >=0:
+
+                producto = Producto(idProducto, nombreProducto, stock, precio,
+                                    fotoProducto) 
+                producto.save()
+                context={'mensaje':"Ok, datos grabados..."}
+            else:
+                context={'mensaje':"Error, los campos no deben estar vacios"}
+
+           #Agregar
+        if opcion=="Actualizar":
+            idProducto=request.POST["idProducto"]
+            nombreProducto=request.POST["nombreProducto"]
+            stock=int(request.POST["stock"])
+            precio=int(request.POST["precio"])
+            try:
+                fotoProducto=request.FILES["fotoProducto"]
+            except:
+                fotoProducto=""
+       
+            if idProducto != "" and nombreProducto != "" and stock >=0 \
+                and precio >=0:
+
+                producto = Producto(idProducto, nombreProducto, stock, precio,
+                                    fotoProducto) 
+                producto.save()
+                context={'mensaje':"Ok, datos grabados..."}
+            else:
+                context={'mensaje':"Error, los campos no deben estar vacios"}
+            return render(request,"personas/productos_edit.html",context) 
+
+
+    return render(request,"personas/productos_add.html",context)   
+
+def productos_del(request, pk):
+    mensajes=[]
+    errores=[]
+    productos = Producto.objects.all()
+    try:
+        producto=Producto.objects.get(idProducto=pk)
+        context={}
+        if producto:
+           producto.delete()
+           mensajes.append("Bien, datos eliminados...")
+
+           context = {'productos': productos,  'mensajes': mensajes, 'errores':errores}
+
+           return render(request, 'personas/productos_list.html', context)
+
+    except:
+        print("Error, rut no existe")
+        errores.append("Error rut no encontrado.")
+        context = {'productos': productos,  'mensajes': mensajes, 'errores':errores}
+        return render(request, 'personal/productos_list.html', context)
+
+def productos_edit(request, pk):
+    mensajes=[]
+    errores=[]
+   
+    
+    context={}
+    productos = Producto.objects.all()
+    #try:
+    producto=Producto.objects.get(idProducto=pk)
+
+    context={}
+    if producto:
+        print("Edit encontró a producto...")
+        mensajes.append("Bien, datos eliminados...")
+
+        context = {'producto': producto,  'mensajes': mensajes, 'errores':errores}
+
+        return render(request, 'personas/productos_edit.html', context)
+    
+    return render(request, 'personas/productos_list.html', context)
+  

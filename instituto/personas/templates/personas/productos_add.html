@@ -1,0 +1,43 @@
+{% extends "personas/base.html" %}
+
+{% block title %} Gestión Instituto {% endblock %}
+
+
+{% block content%}
+<br>
+    <div class="container">
+        <br><br><br>
+        <form action="productosAdd" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            Id producto    :  <input type="text" name="idProducto"><br>
+            Nombre Producto:  <input type="text" name="nombreProducto" ><br>
+            Stock          :  <input type="number" name="stock" value="0"><br>
+            Precio         :  <input type="number" name="precio" value="0"><br>
+            Foto Producto  :  <input type="file" name="fotoProducto" ><br>
+            <input type="submit" name="opcion" value="Agregar">
+            <input type="submit" name="opcion" value="Editar">
+            
+            <br>
+        </form>
+
+
+
+        <div id="idMensajes">
+
+            {% if mensaje%}
+            <div class="alert alert-success" role="alert">
+                  {{mensaje}}
+            </div>
+            {% endif %}   
+        </div>
+
+    </div>
+
+
+    {% block javascript%}
+       
+    {% endblock %}
+
+
+
+{% endblock %}
