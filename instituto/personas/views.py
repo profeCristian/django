@@ -1,9 +1,9 @@
 from multiprocessing import context
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from .models import Persona, Producto
-
+from .models import Persona, Producto, Alumno
+from . forms import Alumno as FormAlumno
 
 # Create your views here.
 '''
@@ -369,3 +369,145 @@ def productos_edit(request, pk):
     
     return render(request, 'personas/productos_list.html', context)
   
+
+
+
+  #**********************  CRUD ALUMNO   ******************************
+
+def crud_alumno(request):
+
+    print("hola  estoy en crud_alumnos...")
+    alumnos = Alumno.objects.all()
+    context = {'alumnos': alumnos,'accion': 'tabla'}
+    return render(request, 'personas/crud_alumno.html', context)
+
+def cargar_formulario_alumno(request):
+    context = {}
+    mensajes = []
+    errores = []
+    accion = 'tabla'
+    if request.method == 'POST':
+        print("Alumno Post")
+        form = FormAlumno(request.POST or None, request.FILES or None)
+        print("Alumno Post 2")
+        if form.is_valid():
+            print("Alumno Post is_valid")
+
+            alumno = form.save()
+            #alumno.save()
+            mensajes.append("Bien!, datos grabados...")
+            print("Bien!, datos grabados...")
+            alumnos=Alumno.objects.all()
+            context = {'form':form, 'mensajes': mensajes,'accion': accion,'alumnos':alumnos}
+            return render(request,'personas/crud_alumno.html', context)
+        else:
+            errores.append( form)
+            print("No pasó el is_valid ", form.is_valid())    
+
+    else:
+        print("Mostrando formulario alumno...")
+        form = FormAlumno()
+        accion = 'form_add'
+
+    context = {'form':form, 'mensajes': mensajes,'accion': accion,'errores':errores}
+    return render(request,'personas/crud_alumno.html', context)
+
+'''
+def add_alumno(request):
+    print("Entró a add_alumno")
+    context = {}
+    mensajes = []
+    errores = []
+    accion = 'tabla'
+    if request.method == 'POST':
+        print("add_alumno POST")
+        form = FormAlumno(request.POST, request.FILES)
+        if form.is_valid():
+            print("add_alumno Valid")
+            alumno = form.save()
+            alumno.save()
+            mensajes.append("Bien!, datos grabados...")
+            print("Bien!, datos grabados...")
+            context = {'form':form, 'mensajes': mensajes,'accion': accion}
+            return render(request,'personas/crud_alumno.html', context)
+        else:
+            print("Form add_alumno no válido...")
+    else:
+        print("entró al else add_alumno...")
+        form = FormAlumno()
+        accion = 'form_add'
+
+    context = {'form':form, 'mensajes': mensajes,'accion': accion}
+    return render(request,'personas/crud_alumno.html', context)
+'''
+
+
+def del_alumno(request, pk):
+    mensajes=[]
+    errores=[]
+    alumnos = Alumno.objects.all()
+    try:
+        alumno=Alumno.objects.get(rut=pk)
+        context={}
+        if alumno:
+           alumno.delete()
+           mensajes.append("Bien, datos eliminados...")
+
+           context = {'alumnos': alumnos,  'mensajes': mensajes, 'errores':errores}
+
+           return render(request, 'personas/crud_alumno.html', context)
+
+    except:
+        print("Error, eliminar rut no existe")
+        errores.append("Error rut no encontrado.")
+        context = {'alumnos': alumnos,  'mensajes': mensajes, 'errores':errores}
+        return render(request, 'personas/crud_alumno.html', context)
+
+
+def editar_alumno(request, pk):
+    mensajes=[]
+    errores=[]
+    alumnos = Alumno.objects.all()
+    alumno =  get_object_or_404(Alumno, rut=pk)
+
+    if alumno:
+        form = FormAlumno(request.POST or None,
+                            request.FILES or None, instance=alumno)
+        #form = Formalumno(instance=alumno)
+        print("estoy en alumno true")
+        if request.method == 'POST':
+            print("ingresó al POST")
+            #form = Formalumno(request.POST, request.FILES)
+           # print("formulario id_persona: " + form.id_persona)
+            if form.is_valid():
+                print("is valid...")
+                alumno = form.save()
+                alumno.save()
+                mensajes.append("Bien!, datos grabados...")
+                print("Bien!, datos grabados...")
+                accion = 'tabla'
+                context = {'alumnos': alumnos, 'mensajes': mensajes,
+                           'errores': errores, 'accion': accion}
+            else:
+                errores.append("Error!, datos no grabados...del EDIT")
+                print("Error!, datos no grabados... form="+str(form.errors))
+                accion='tabla'
+                context = {'alumnos': alumnos, 'mensajes': mensajes,
+                       'errores': errores, 'accion': accion}
+
+            return render(request, 'personas/crud_alumno.html', context)
+        else:
+            mensajes.append("Bien!, id existe...")
+            print("entró al else form=alumno()...")
+            accion = 'form_edit'
+            context = {'alumnos': alumnos, 'mensajes': mensajes,
+                       'errores': errores,'form':form, 'accion': accion}
+            return render(request, 'personas/crud_alumno.html', context)
+
+    else:
+        print("Error, id_alumno no existe")
+        errores.append("Error id no encontrado.")
+        accion='tabla'
+        context = {'alumnos': alumnos, 'mensajes': mensajes,
+                   'errores': errores, 'accion':accion}
+        return render(request, 'personas/crud_alumno.html', context)

@@ -1,0 +1,177 @@
+{% extends "personas/base.html" %}
+
+
+{% block title %} Gestión de Alumnos  {% endblock %}
+
+
+
+
+{% block content%}
+
+
+<br>
+    <div class="container">
+
+        <div id="mensajes">
+            {% if mensajes %}
+               <ul>
+                 {% for mensaje in mensajes %}
+                   <div class="alert alert-success" role="alert">
+                        <li>{{ mensaje }}</li>
+                   </div>
+
+                 {% endfor %}
+               </ul>
+            {% endif %}
+        </div>
+
+
+        <div id="errores">
+            {% if errores %}
+               <ul>
+                 {% for error in errores %}
+                   <div class="alert alert-danger" role="alert">
+                        <li>{{ error }}</li>
+                   </div>
+
+                 {% endfor %}
+               </ul>
+            {% endif %}
+        </div>
+
+        {% if accion == "tabla" %}
+            <br>
+            <br><br><br>
+            <div id="cuadro1">
+                <div class="table-wrapper">
+                   <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-8"><h2>Alumnos <b>Listado</b></h2></div>
+                            <div class="col-sm-4">
+
+                                 <a class="add"    title="Agregar"    data-toggle="tooltip"
+                                   href="{% url 'cargar_formulario_alumno' %}">
+                                     <i class="material-icons"></i></a>
+                                <!--<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                                 -->
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <!--
+                class="table table-hover"
+                -->
+
+                    <table  class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Rut</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Edad</th>
+                            <th scope="col">Género</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for alumno in alumnos %}
+                            <tr>
+                                <td>{{alumno.rut}}</td>
+                                <td>{{alumno.nombre}}</td>
+                                <td>{{alumno.edad}}</td>
+                                <td>{{alumno.id_genero}}</td>
+                                <td>
+                                    
+                                    <a class="edit"   title="Edit"   data-toggle="tooltip"
+                                        href="{% url 'editar_alumno' pk=alumno.rut %}">
+                                        <i class="material-icons"></i></a>
+
+
+                                    <a class="delete" title="Delete" data-toggle="tooltip"
+                                        href="{% url 'del_alumno' pk=alumno.rut %}">
+                                        <i class="material-icons"></i></a>
+
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if accion == "form_add" %}
+            <div id="cuadro2">
+              <div class="table-wrapper">
+                   <div class="col-sm-12" align="right">
+                       <a class="add"    title="Ver datos en tabla"    data-toggle="tooltip"
+                           href="{% url 'crud_alumno' %}">
+                           <span class="material-icons">list</span>
+                       </a>
+                   </div>
+                    <h3>Datos del Alumno add</h3>
+
+                    <form role="form"  enctype="multipart/form-data"
+                        action=""
+                        method="POST" novalidate>
+                        {% csrf_token %}
+                        <table>
+                            {{ form.as_table }}
+                        </table>
+                        <input type="submit" value="Enviar">
+
+                    </form>
+
+              </div>
+            </div>
+        {% endif %}
+
+        {% if accion == "form_edit" %}
+            <div id="cuadro3">
+              <div class="table-wrapper">
+                   <div class="col-sm-12" align="right">
+                       <a class="add"    title="Ver datos en talba"    data-toggle="tooltip"
+                           href="{% url 'crud_alumno' %}">
+                           <span class="material-icons">list</span>
+                       </a>
+                   </div>
+                    <h3>Datos del Jugador</h3>
+
+                    <form  role="form"  enctype="multipart/form-data"
+
+                           action=""
+
+                           method="POST" novalidate>
+                        {% csrf_token %}
+                        <table>
+                            {{ form.as_table }}
+                            <input type="hidden" name="id_persona" value="{{form.id_persona}}" >
+                        </table>
+                         <input type="submit" value="Actualizar">
+
+                    </form>
+
+              </div>
+            </div>
+        {% endif %}
+
+
+    </div>
+
+{% endblock %}
+
+{% block javascript%}
+    <script>    
+
+        $(document).ready(function(){
+            $("#mensajes").delay(1500).fadeOut("slow");
+            $("#errores").delay(1500).fadeOut("slow");
+        });
+
+    </script>
+{% endblock %}

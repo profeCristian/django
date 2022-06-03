@@ -17,6 +17,14 @@
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+
+        <style>
+          #canvas_container {
+              width: 800px;
+              height: 450px;
+              overflow: auto;
+          }
+      </style>
         
     </head>
 
@@ -38,35 +46,14 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="home">Persona</a>
                   <a class="dropdown-item" href="productos">Producto</a>
-                  <a class="dropdown-item" href="#">Alumno</a>
+                  <a class="dropdown-item" href="{% url 'crud_alumno' %}">Alumno</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Otros</a>
                   </div>
               </li>
 
-               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Reportes
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Profesores</a>
-                  <a class="dropdown-item" href="#">Apoderados</a>
-                  <a class="dropdown-item" href="reporte_jugadores">Jugadores</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Cursos</a>
-                  </div>
-              </li>
-
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Equipos
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Equipos</a>
-                  <a class="dropdown-item" href="#">Reportes</a>
-                </div>
-              </li>
-
+              
+            
 
               <li class="nav-item">
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -87,8 +74,8 @@
             </ul>
            </div>
         </nav>
-
-
+         
+        <br><br>
 
 
 
@@ -112,7 +99,7 @@
                //$("#cuadro1").hide(1500);
               // $("#cuadro2").hide(1500);
                $("#idMensajes").delay(1500).fadeOut("slow");
-              // $("#idErrores").delay(1500).fadeOut("slow");
+               $("#idErrores").delay(1500).fadeOut("slow");
 
          
 

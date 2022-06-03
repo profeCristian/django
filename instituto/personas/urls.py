@@ -17,6 +17,12 @@ urlpatterns=[
     path("productosAdd", views.productosAdd, name="productosAdd" ),
     path('productos_del/<str:pk>', views.productos_del, name='productos_del'),
     path('productos_edit/<str:pk>', views.productos_edit, name='productos_edit'),
+
+    path('crud_alumno', views.crud_alumno, name='crud_alumno'),
+    path('cargar_formulario_alumno', views.cargar_formulario_alumno, name='cargar_formulario_alumno'),
+    
+    path('del_alumno/<str:pk>', views.del_alumno, name='del_alumno'),
+    path('editar_alumno/<str:pk>', views.editar_alumno, name='editar_alumno'),
+    #path('add_alumno', views.add_alumno, name='add_alumno'),
 ]
 
-#  path("sumar/<int:resultado>", views.sumar, name="sumar" ),
