@@ -412,34 +412,6 @@ def cargar_formulario_alumno(request):
     context = {'form':form, 'mensajes': mensajes,'accion': accion,'errores':errores}
     return render(request,'personas/crud_alumno.html', context)
 
-'''
-def add_alumno(request):
-    print("Entró a add_alumno")
-    context = {}
-    mensajes = []
-    errores = []
-    accion = 'tabla'
-    if request.method == 'POST':
-        print("add_alumno POST")
-        form = FormAlumno(request.POST, request.FILES)
-        if form.is_valid():
-            print("add_alumno Valid")
-            alumno = form.save()
-            alumno.save()
-            mensajes.append("Bien!, datos grabados...")
-            print("Bien!, datos grabados...")
-            context = {'form':form, 'mensajes': mensajes,'accion': accion}
-            return render(request,'personas/crud_alumno.html', context)
-        else:
-            print("Form add_alumno no válido...")
-    else:
-        print("entró al else add_alumno...")
-        form = FormAlumno()
-        accion = 'form_add'
-
-    context = {'form':form, 'mensajes': mensajes,'accion': accion}
-    return render(request,'personas/crud_alumno.html', context)
-'''
 
 
 def del_alumno(request, pk):
@@ -452,9 +424,9 @@ def del_alumno(request, pk):
         if alumno:
            alumno.delete()
            mensajes.append("Bien, datos eliminados...")
-
-           context = {'alumnos': alumnos,  'mensajes': mensajes, 'errores':errores}
-
+           accion = 'tabla'
+           context = {'alumnos': alumnos,  'mensajes': mensajes,'accion':accion, 'errores':errores}
+           
            return render(request, 'personas/crud_alumno.html', context)
 
     except:
